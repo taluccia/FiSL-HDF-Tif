@@ -1,0 +1,41 @@
+---
+title: "Terra Hdf to Tif"
+output: html_document
+date: "2023-11-08"
+---
+
+
+```{r}
+library(terra)
+library(stringr)
+```
+
+```{r}
+rlist <- list.files(path="../2018NABorealAlbedo/",pattern='hdf$', full.names = TRUE)
+```
+
+```{r eval=FALSE, include=FALSE}
+rlist
+```
+### Name items in a list with file name
+```{r}
+names(rlist) <- tools::file_path_sans_ext(basename(rlist))
+```
+
+```{r eval=FALSE, include=FALSE}
+names(rlist)
+```
+# THIS LOOP WORKS!
+```{r}
+out.dir <- "../outputs/2018NABorealAlbedo"
+```
+```{r}
+ 
+
+lapply(rlist, function(i) { 
+  tryCatch(writeRaster(rast(i), file.path(out.dir, 
+      paste0(tools::file_path_sans_ext(basename(i)), ".tif"))),
+      
+      error=function(e) NULL)
+})  
+```

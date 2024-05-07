@@ -1,0 +1,35 @@
+---
+title: "SelectBands"
+output: html_document
+date: "2023-11-15"
+---
+
+# Bands of interest
+"Albedo_WSA_shortwave" [4]
+"Albedo_Band_Quality_shortwave" [7]
+
+```{r}
+library(terra)
+```
+
+```{r}
+tiflist <- list.files(path="../outputs/2018NABorealAlbedo/",pattern='tif$', full.names = TRUE)
+```
+
+```{r}
+first = rast(tiflist[1])
+names(first)
+```
+
+```{r}
+out.dir <- "../outputs/2018NABorealWsaSprg"
+```
+
+```{r}
+lapply(tiflist, function(i) { 
+  tryCatch(writeRaster(rast(i, lyrs=c("Albedo_WSA_shortwave", "Albedo_Band_Quality_shortwave")), file.path(out.dir, 
+      paste0(tools::file_path_sans_ext(basename(i)), ".tif"))),
+      
+      error=function(e) NULL)
+})  
+```

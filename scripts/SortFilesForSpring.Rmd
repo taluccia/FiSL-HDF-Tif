@@ -1,0 +1,362 @@
+---
+title: "Sort Files for spring"
+output: html_document
+date: "2023-11-17"
+---
+
+# Overview
+Sort Images for spring only
+```{r}
+library(terra)
+library(dplyr)
+```
+
+
+
+```{r}
+t = read.table(text = list.files(path="../outputs/2018NABorealWsa",pattern='tif$',
+                             include.dirs= FALSE, 
+                             full.names=TRUE), 
+           sep = "/")
+```
+
+```{r}
+t
+```
+
+```{r}
+cat(paste0(sprintf("'%s'", unique(t$V4)), collapse=", "))
+```
+
+```{r}
+df = cbind(t, read.table(text = as.character(t$V4), sep = "_"))
+```
+
+```{r}
+df
+```
+# Select files for ALASKA
+```{r}
+df1 = df[4:13]
+```
+
+```{r}
+df1
+```
+```{r eval=FALSE, include=FALSE}
+# PR for SK region
+target_PR = c(75010, 75011, 75012, 75013, 75014, 75015, 75016,
+           74010, 74011, 74012, 74013, 74014, 74015, 74016,
+           73010, 73011, 73012, 73013, 73014, 73015, 73016,
+           72010, 72011, 72012, 72013, 72014, 72015, 72016,
+           71010, 71011, 71012, 71013, 71014, 71015, 71016,
+           70010, 70011, 70012, 70013, 70014, 70015, 70016,
+           69010, 69011, 69012, 69013, 69014, 69015, 69016,
+           68010, 68011, 68012, 68013, 68014, 68015, 68016,
+           67010, 67011, 67012, 67013, 67014, 67015, 67016,
+           66010, 66011, 66012, 66013, 66014, 66015, 66016,
+           65010, 65011, 65012, 65013, 65014, 65015, 65016,
+           64010, 64011, 64012, 64013, 64014, 64015, 64016,
+           63010, 63011, 63012, 63013, 63014, 63015, 63016,
+           62010, 62011, 62012, 62013, 62014, 62015, 62016,
+           61010, 61011, 61012, 61013, 61014, 61015, 61016)
+
+```
+
+```{r eval=FALSE, include=FALSE}
+# PR for AK data
+(
+  df2 = df1 %>% 
+  rename(file = V4, x1=V1, x2=V2, x3=V3, x4=V4.1, x5=V5, x6=V6, x7=V7, x8=V8, x9=V9) %>%
+    filter(x3 %in% target_PR)
+)
+```
+
+```{r eval=FALSE, include=FALSE}
+unique(sort(df2$x3))
+```
+```{r eval=FALSE, include=FALSE}
+cat(paste0(sprintf('"%s"', unique(df2$file)), collapse=", "))
+```
+
+
+```{r}
+unique(sort(df1$V4.1))
+```
+
+```{r}
+df1 %>% filter(V4.1 %in% c(20180101:20180601))
+```
+
+
+```{r}
+files.to.keep = c("LC08_L1GT_062011_20180412_20180417_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_062012_20180412_20180417_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_062014_20180223_20180308_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_063011_20180318_20180403_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_066015_20180424_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_070016_20180420_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_071010_20180310_20180320_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_071010_20180326_20180404_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_071010_20180411_20180417_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_071010_20180427_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_071013_20180310_20180320_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_071013_20180411_20180417_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_071015_20180222_20180308_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_072010_20180317_20180403_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_072010_20180402_20180416_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_072010_20180418_20180501_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_073010_20180308_20180320_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_073010_20180324_20180404_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_073010_20180409_20180417_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_074010_20180331_20180416_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_074011_20180331_20180416_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_074014_20180331_20180416_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_074016_20180331_20180416_01_T2_albedo_broad.tif",
+                  "LC08_L1GT_074016_20180416_20180501_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_062011_20180311_20180320_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_062011_20180327_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062011_20180428_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062012_20180311_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062012_20180327_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062012_20180428_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062013_20180311_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062013_20180327_20180405_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062013_20180412_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062013_20180428_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062014_20180311_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062014_20180327_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062014_20180412_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062014_20180428_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062015_20180223_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062015_20180311_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062015_20180327_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062015_20180412_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062015_20180428_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062016_20180223_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062016_20180311_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062016_20180327_20180405_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062016_20180412_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_062016_20180428_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063011_20180419_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063012_20180302_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063012_20180318_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063012_20180403_20180417_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_063012_20180419_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063013_20180302_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063013_20180318_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063013_20180403_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063013_20180419_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063014_20180302_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063014_20180318_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063014_20180403_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063014_20180419_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063015_20180302_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063015_20180318_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063015_20180403_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063015_20180419_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063016_20180318_20180403_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_063016_20180403_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_063016_20180419_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064011_20180309_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064011_20180325_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064011_20180410_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064011_20180426_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064012_20180309_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064012_20180325_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064012_20180410_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064012_20180426_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064013_20180309_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064013_20180325_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064013_20180410_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064013_20180426_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064014_20180309_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064014_20180325_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064014_20180410_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064014_20180426_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064015_20180221_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064015_20180309_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064015_20180325_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064015_20180410_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064015_20180426_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064016_20180221_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064016_20180309_20180320_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_064016_20180325_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064016_20180410_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_064016_20180426_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066011_20180307_20180320_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_066011_20180323_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066011_20180408_20180417_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_066011_20180424_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_066012_20180307_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066012_20180323_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066012_20180408_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066012_20180424_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_066013_20180307_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066013_20180323_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066013_20180408_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066013_20180424_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066014_20180307_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066014_20180323_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066014_20180408_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066014_20180424_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066015_20180219_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066015_20180307_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066015_20180323_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066015_20180408_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066016_20180219_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066016_20180307_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066016_20180323_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_066016_20180408_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068011_20180305_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068011_20180321_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068011_20180406_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068011_20180422_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068012_20180305_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068012_20180321_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068012_20180406_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068012_20180422_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068013_20180305_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068013_20180321_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068013_20180406_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068013_20180422_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068014_20180305_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068014_20180321_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068014_20180406_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068014_20180422_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068015_20180305_20180319_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_068015_20180321_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068015_20180406_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068015_20180422_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068016_20180217_20180307_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_068016_20180305_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068016_20180321_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068016_20180406_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_068016_20180422_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070011_20180319_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070011_20180404_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070011_20180420_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070012_20180303_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070012_20180319_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070012_20180404_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070012_20180420_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070013_20180303_20180319_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070013_20180319_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070013_20180404_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070013_20180420_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070014_20180319_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070014_20180404_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070014_20180420_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070015_20180319_20180403_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_070015_20180404_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070015_20180420_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_070016_20180319_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_070016_20180404_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071011_20180310_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071011_20180326_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071011_20180411_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071011_20180427_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071012_20180310_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071012_20180326_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071012_20180411_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071012_20180427_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071013_20180326_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071013_20180427_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071014_20180310_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071014_20180326_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071014_20180411_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071014_20180427_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071015_20180310_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071015_20180326_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071015_20180411_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071015_20180427_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071016_20180222_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071016_20180310_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071016_20180326_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071016_20180411_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_071016_20180427_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072011_20180317_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072011_20180402_20180416_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072011_20180418_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072012_20180301_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072012_20180317_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072012_20180402_20180416_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072012_20180418_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072013_20180301_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072013_20180317_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072013_20180402_20180416_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072013_20180418_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072014_20180301_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072014_20180317_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072014_20180402_20180416_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072014_20180418_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072015_20180301_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072015_20180317_20180403_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072015_20180402_20180416_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072015_20180418_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072016_20180301_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072016_20180402_20180416_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_072016_20180418_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073010_20180425_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_073011_20180308_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073011_20180324_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073011_20180409_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073011_20180425_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_073012_20180308_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073012_20180324_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073012_20180409_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073012_20180425_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073013_20180308_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073013_20180324_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073013_20180409_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073013_20180425_20180502_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_073014_20180308_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073014_20180324_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073014_20180409_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073014_20180425_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073015_20180220_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073015_20180308_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073015_20180324_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073015_20180409_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073015_20180425_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073016_20180220_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073016_20180308_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073016_20180324_20180404_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073016_20180409_20180417_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_073016_20180425_20180502_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074010_20180315_20180320_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_074010_20180416_20180501_01_T1_albedo_broad.tif",             
+                  "LC08_L1TP_074011_20180315_20180320_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_074011_20180416_20180501_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_074012_20180331_20180416_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074012_20180416_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074013_20180227_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074013_20180315_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074013_20180331_20180416_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074014_20180227_20180308_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074014_20180315_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074014_20180416_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074015_20180227_20180308_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_074015_20180315_20180320_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074015_20180416_20180501_01_T1_albedo_broad.tif",
+                  "LC08_L1TP_074016_20180227_20180308_01_T2_albedo_broad.tif",
+                  "LC08_L1TP_074016_20180315_20180320_01_T1_albedo_broad.tif")
+```
+
+
+```{r}
+source.path <- "../outputs/sprgWsa"
+destination.path <-"../outputs/akSprgWsa"
+
+# Create destination folder if it does not exist
+ifelse(!dir.exists(destination.path), dir.create(destination.path), FALSE)
+
+# Get list of files in source folder
+filenames <- list.files(source.path)
+
+# Move files that are not in files.to.keep to the destination folder
+lapply(filenames, function(x) 
+                    if(!(x %in% files.to.keep))
+                      {file.rename(from = file.path(source.path,x),to = file.path(destination.path,x))})
+
+```

@@ -1,0 +1,95 @@
+---
+title: "Compare File List"
+output: html_document
+date: "2023-11-09"
+---
+
+
+
+```{r}
+hdflist <- list.files(path="../2018NABorealAlbedo/",pattern='hdf$', full.names = TRUE)
+```
+
+```{r}
+hdflist
+```
+
+```{r}
+tiflist <- list.files(path="../outputs/2018NABorealAlbedo/",pattern='tif$', full.names = TRUE)
+```
+
+```{r}
+tiflist
+```
+
+
+```{r}
+setdiff(tools::file_path_sans_ext(basename(hdflist)), tools::file_path_sans_ext(basename(tiflist)))
+```
+
+# Trackin 2018 NA Boreal Albedo file numbers
+001 - 025 236 (hdf) 235 (tif) "LC08_L1TP_033026_20180316_20180402_01_T2_albedo_broad"
+
+026-050 - 222
+051-075 - 499
+076-100 - 934
+
+total images 1162
+
+
+```{r}
+wsaTiflist <- list.files(path="../outputs/WSA/Batch5",pattern='tif$', full.names = TRUE)
+```
+```{r}
+springlist <- list.files(path="../outputs/sprgWsa/",pattern='tif$', full.names = TRUE)
+```
+
+# Notes on Files that do not convert from hdf to tif by batch
+## L1GT_test
+297 HDF files read into list
+297 tif files read into list (50.4 GB all bands | 10.4 GB 2 bands)
+## Batch 3
+83 hdf files read into list
+82 tif files read into list ( all bands | 5.9 GB 2 bands)
+"LC08_L1TP_037017_20181022_20181031_01_T1_albedo_broad"
+
+## Batch 4
+408 hdf files read into list
+408 tif files read into list (153.0 GB all bands | 29.4 GB 2 bands)
+
+## Batch 5
+940 hdf files read into list
+940 tif files read into list (330.5 GB all bands | 64.6 gb 2 bands)
+
+## Batch6
+764 hdf files read into list
+764 tif files read into list (276.1 GB all bands | 54.3 GB 2 bands)
+
+## Batch 7 
+639 hdf files read into list
+636 tif files read into list (194.0 GB all bands | 38.8 GB 2 bands)
+[1] "LC08_L1TP_072018_20180909_20180913_01_T1_albedo_broad"
+[2] "LC08_L1TP_072019_20180909_20180913_01_T1_albedo_broad"
+[3] "LC08_L1TP_072020_20180925_20181009_01_T1_albedo_broad"
+
+## Batch 8
+269 HDF files read into list
+269 TIF files read into list (74.6 GB all bands | 15.1 GB 2 bands)
+
+## Batch 9
+2 hdf files read into list
+2 tif files read into list (267.3 MB all bands | 63.8 mb 2 bands)
+
+##j01m03_1
+681 hdf
+681 tif (385.1 GB | 71.5 GB)
+
+##j01m03_2
+318 hdf
+318 tif (174.1 GB |  GB)
+
+##j01m03_3
+605 hdf
+605 tif (174.1 GB |  GB). 143.7 gb for all spring images
+
+

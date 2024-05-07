@@ -1,0 +1,39 @@
+---
+title: "SSH Code"
+author: "Anna Talucci"
+date: "2024-05-07"
+output: html_document
+---
+
+# Overview 
+
+From ARCT-83.sh file command line code for working in SSH window on VM for converting HDF to Tif files. Includes code to transfer files, unzip, delete, move to and from google cloud bucket
+
+```{sh}
+# change directory to master
+cd /home/master
+
+# Copy a Batch from Storage Bucket to the VM
+sudo gsutil -m cp -r gs://fisl/BatchNUMBER.zip /home/master/
+
+# Unzip contents of zipped folder to the VM - this will create a folder with the contents of zipped folder  with same name as zipped folder
+sudo unzip BatchNUMBER.zip -d /home/master/
+
+# Remove the zipped folder from the VM's disk
+sudo rm -r BatchNUMBER.zip 
+
+# Remove the un-zipped contents after done with input processing
+sudo rm -r BatchNUMBER
+
+# Copy the outputs back to bucket
+sudo gsutil -m cp -r /home/master/path/to/outputs/ gs://fisl/path/to/where/you/want/on/bucket
+
+# Move files from one google cloud bucket folder to another
+sudo gsutil mv 'gs://fisl/2018NABorealWsaSprg/2018NABorealWsaSprg/*.tif' gs://fisl/2018NABorealWsaSprg/
+
+# check folder size
+sudo gsutil du -sh gs://fisl/2018NABorealWsaSprg
+
+# number of files
+sudo gsutil du gs://2018NABorealWsaSprg | wc -l
+```
